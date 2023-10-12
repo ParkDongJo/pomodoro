@@ -7,6 +7,12 @@
   min-height: 100vh;
 }
 
+.contaner {
+  width: 400em;
+  height: 300em;
+  background-color: blue;
+}
+
 .description {
   display: inherit;
   justify-content: inherit;

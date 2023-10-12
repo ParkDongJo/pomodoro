@@ -1,36 +1,29 @@
-"use client"
-import { useEffect, useRef } from "react";
+import { use } from "react"
+import Header from "./layouts/Nav";
+import Timer from "../components/Timer";
+import TaskList from "../components/TaskList";
+import IconButton from "../components/IconButton";
+import { Task } from './../types'
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
+const fetchTasks = async () => {
+  // const res = await fetch("http://localhost:3000/api/tasks");
+  // const data = await res.json();
+  return [
+    { id: 1, text: '9:00', done: true, startTime: new Date(), endTime: new Date() },
+    { id: 2, text: '9:00', done: true, startTime: new Date(), endTime: new Date() },
+    { id: 3, text: '9:00', done: true, startTime: new Date(), endTime: new Date() },
+  ] as Task[];
 }
 
 export default function Home() {
-
-  useEffect(() => {
-    const kakaoMapScript = document.createElement('script')
-    kakaoMapScript.async = false
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey={}&autoload=false`
-    document.head.appendChild(kakaoMapScript)
-  
-    const onLoadKakaoAPI = () => {
-      window.kakao.maps.load(() => {
-        var container = document.getElementById('map')
-        var options = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-          level: 3,
-        }
-  
-        var map = new window.kakao.maps.Map(container, options)
-      })
-    }
-  
-    kakaoMapScript.addEventListener('load', onLoadKakaoAPI)
-  }, [])
+  const tasks = use(fetchTasks());
 
   return (
-    <div id="map" style={{ width: 500, height: 400 }}></div>
+    <>
+      <Header />
+      <Timer />
+      <TaskList datas={tasks} />
+      <IconButton />
+    </>
   )
 };
