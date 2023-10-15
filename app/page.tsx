@@ -1,8 +1,10 @@
 import { use } from "react"
-import Header from "./layouts/Nav";
-import Timer from "../components/Timer";
-import TaskList from "../components/TaskList";
-import IconButton from "../components/IconButton";
+import Header from "../src/layouts/Nav";
+import Timer from "../src/components/Timer";
+import TaskList from "../src/components/TaskList";
+import IconButton from "../src/components/IconButton";
+import StatusBoard from "@/src/components/StatusBoard";
+import TaskInput from "@/src/components/TaskInput";
 import { Task } from './../types'
 
 const fetchTasks = async () => {
@@ -22,8 +24,10 @@ export default function Home() {
     <>
       <Header />
       <Timer />
+      <StatusBoard order={1} task={'test'} />
       <TaskList datas={tasks} />
       <IconButton />
+      <TaskInput />
     </>
   )
 };
