@@ -7,9 +7,8 @@ import useTimer from "../hooks/useTimer";
 export default function Timer() {
   const timer = useTimer()
 
-  const getSeconds = (time: number) => {
-    const seconds = Number(time % 60);
-    return seconds < 10 ? `0${seconds}` : String(seconds);
+  const showTimeTmpl = (time: number) => {
+    return time < 10 ? `0${time}` : String(time);
   }
   const handleStart = () => {
     timer.start()
@@ -21,7 +20,7 @@ export default function Timer() {
   return (
   <div className={styles.main}>
     <TimeList />
-    <p>{Math.floor(timer.time / 60)} : {getSeconds(timer.time)}</p>
+    <p>{showTimeTmpl(timer.minutes)} : {showTimeTmpl(timer.seconds)}</p>
     <IconButton onClick={handleStart} />
     <IconButton onClick={handleStop} />
   </div>)
