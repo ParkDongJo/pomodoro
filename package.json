@@ -17,10 +17,12 @@
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "rxjs": "^7.8.1",
     "typescript": "5.2.2"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.9",
+    "@types/rx": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
     "eslint": "^8.51.0",
