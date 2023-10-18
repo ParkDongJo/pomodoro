@@ -16,9 +16,9 @@ export default function TaskFrom(props: Props) {
     addTask(value);
     setValue(undefined);
   }
-  const handleChange = (value: string) => {
+  const handleChange = (value: string | number) => {
     startTransition(() => {
-      setValue(value);
+      setValue(value.toString());
     })
   }
 

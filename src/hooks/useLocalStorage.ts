@@ -1,34 +1,35 @@
-import { use } from "react";
+import { wrapRunWhenWindow } from '@/src/utils/server';
+import { Task} from '@/types';
 
 interface ItemWithId {
   id: number;
 }
 
 const useLocalStorage = () => {
-  const getItems = <T extends ItemWithId>(key: string): T[] => {
+  const getItems = wrapRunWhenWindow(<T extends ItemWithId>(key: string): T[] => {
     const tasks = localStorage.getItem(key);
     return  tasks ? JSON.parse(tasks) : [];
-  }
+  })
 
   const getItem = <T extends ItemWithId>(key: string, id: number): T|undefined => {
-    const items: T[] = getItems(key);
+    const items: T[] = getItems?.(key);
     return items.find(item => item.id === id);
   }
 
-  const setItems = <T extends ItemWithId>(key: string, items: T[]) => {
+  const setItems = wrapRunWhenWindow(<T extends ItemWithId>(key: string, items: T[]) => {
     localStorage.setItem(key, JSON.stringify(items));
-  }
+  })
 
   const setItem = <T extends ItemWithId>(key: string, item: T) => {
-    const items = getItems<T>(key);
-    setItems<T>(key, [...items, item]);
+    const items = getItems?.(key);
+    setItems?.(key, [...items, item]);
   }
 
   const updateItems = <T extends ItemWithId>(key: string, item: T) => {
-    const items = getItems<T>(key);
-    const index = items.findIndex(t => t.id === item.id);
+    const items = getItems?.(key);
+    const index = items.findIndex((t: T) => t.id === item.id);
     items[index] = item;
-    setItems<T>(key, items);
+    setItems?.(key, items);
   }
 
   return {

@@ -1,11 +1,12 @@
 import { use } from "react"
-import Header from "../src/layouts/Nav";
-import Timer from "../src/components/Timer";
-import TaskList from "../src/components/TaskList";
-import IconButton from "../src/components/IconButton";
+import Header from "@/src/layouts/Nav";
+import Timer from "@/src/components/Timer";
+import TaskList from "@/src/components/TaskList";
+import IconButton from "@/src/components/IconButton";
 import StatusBoard from "@/src/components/StatusBoard";
 import TaskForm from "@/src/components/TaskForm";
-import { Task } from './../types'
+import useTask from "@/src/hooks/useTask";
+import { Task } from '@/types'
 
 const fetchTasks = async () => {
   // const res = await fetch("http://localhost:3000/api/tasks");
@@ -25,7 +26,7 @@ export default function Home() {
       <Header />
       <Timer />
       <StatusBoard order={1} task={'test'} />
-      <TaskList datas={tasks} />
+      <TaskList />
       <IconButton />
       <TaskForm />
     </>
