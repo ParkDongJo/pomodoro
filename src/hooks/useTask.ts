@@ -1,6 +1,7 @@
 import useLocalStorage from '../hooks/useLocalStorage';
 import { incrementId, STORAGE_KEY } from "@/src/utils/task";
 import useStore from '@/src/store/task';
+import { Time } from '@/types'
 
 const useTask = () => {
   const { getItems, setItems } = useLocalStorage();

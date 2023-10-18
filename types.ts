@@ -6,3 +6,7 @@ export type Task = {
   endTime: Date;
 }
 
+export type Time = {
+  minutes: number;
+  seconds: number;
+}
