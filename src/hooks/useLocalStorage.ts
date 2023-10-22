@@ -26,9 +26,8 @@ const useLocalStorage = () => {
 
   const updateItems = <T extends ItemWithId>(key: string, item: T) => {
     const items = getItems?.(key);
-    const index = items.findIndex((t: T) => t.id === item.id);
-    items[index] = item;
-    setItems?.(key, items);
+    const newItems = items.map((t: T) => t.id === item.id ? item : t);
+    setItems?.(key, newItems);
   }
 
   return {

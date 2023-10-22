@@ -11,12 +11,10 @@ interface Props {
 export default function TaskList() {
   const { getTasks } = useTask();
   const store = useStore();
-  // const [datas, setDatas] = useState<TaskType[]>([]);
 
   useEffect(() => {
     const tasks = getTasks();
     store.setTasks(tasks);
-    // setDatas(tasks)
   }, [])
 
   return (<div className={styles.tasks}>
