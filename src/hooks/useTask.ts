@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import useLocalStorage from '../hooks/useLocalStorage';
-import { incrementId, STORAGE_KEY } from "@/src/utils/task";
+import { incrementId, STORAGE_KEY } from '@/src/utils/task';
+import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone } from '@/src/utils/task';
 import { Task } from '@/types';
@@ -11,9 +12,14 @@ const useTask = () => {
   const { getItems, setItems } = useLocalStorage();
   const store = useStore();
 
+  const generateId = pipe(
+    getItems,
+    incrementId
+  )
+
   const addTask = (value: string) => {
     const tasks = getItems?.(STORAGE_KEY)
-    const nextId = incrementId(tasks);
+    const nextId = generateId(STORAGE_KEY)
     const newTask = { id: nextId, text: value, done: false, startTime: new Date(), endTime: new Date() }
 
     setItems?.(STORAGE_KEY, [ ...tasks , newTask ])
