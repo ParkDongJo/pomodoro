@@ -2,26 +2,26 @@
 import { Time } from '@/types'
 
 interface Props {
-  onClick: (time: Time) => void
+  onClick: (learnTime: Time, breakTime: Time) => void
 }
 export default function TimeList(props: Props) {
   const { onClick } = props;
 
-  const times = [
-    { title: '50:00', minutes: 50, seconds: 0 },
-    { title: '25:00', minutes: 25, seconds: 0 },
-    { title: '01:00', minutes: 1, seconds: 0 },
+  const pomodoros = [
+    { title: '50:00', learnTime: { minutes: 25, seconds: 0 }, breakTime: { minutes: 10, seconds: 0 } },
+    { title: '25:00', learnTime: { minutes: 15, seconds: 0 }, breakTime: { minutes: 5, seconds: 0 } },
+    { title: '00:10', learnTime: { minutes: 0, seconds: 10 }, breakTime: { minutes: 0, seconds: 10 } },
   ]
 
   return (
     <div>
-      {times.map((time, index) => (
+      {pomodoros.map((pomo, index) => (
         <span
-          key={`${time.title}-${index}`} 
+          key={`${pomo.title}-${index}`} 
           onClick={() => {
-            onClick({ minutes: time.minutes, seconds: time.seconds })
+            onClick(pomo.learnTime, pomo.breakTime)
           }}>
-            {time.title}
+            {pomo.title}
           </span>
       ))}
     </div>
