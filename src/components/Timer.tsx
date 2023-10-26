@@ -12,6 +12,8 @@ export default function Timer() {
     breakTime,
     start,
     stop,
+    repeatUntil,
+    stopRepeat,
     setLearnTime,
     setBreakTime,
   } = useTimer()
@@ -23,6 +25,12 @@ export default function Timer() {
   const handleStart = () => {
     const task = popTask((task) => !task.done)
     start(() => checkTask(task.id))
+  }
+  const handleRepeat = () => {
+    repeatUntil(3)
+  }
+  const handleStopRepeat = () => {
+    stopRepeat()
   }
   const handleStop = () => {
     stop()
@@ -39,5 +47,9 @@ export default function Timer() {
     <p>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</p>
     <IconButton onClick={handleStart} />
     <IconButton onClick={handleStop} />
+    <div>
+      <IconButton onClick={handleRepeat} />
+      <IconButton onClick={handleStopRepeat} />
+    </div>
   </div>)
 }

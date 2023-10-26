@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
-import { Subscription, interval, takeWhile, map, tap, concat } from 'rxjs';
+import { Subscription, interval, takeWhile, map, tap, concat, repeat } from 'rxjs';
 
 const useTimer = () => {
   const [breakTime, setBreakTime] = useState(0);
   const [learnTime, setLearnTime] = useState(0);
   const timerRef = useRef<Subscription>();
+  const repeatRef = useRef<Subscription>();
 
   const learnTime$ = interval(1000).pipe(
     takeWhile(x => x <= learnTime),
@@ -29,8 +30,22 @@ const useTimer = () => {
       })
   }
 
+  const repeatUntil = (time: number) => {
+    const source$ = concat(learnTime$, breakTime$)
+    repeatRef.current = source$.pipe(repeat(time))
+      .subscribe({
+        complete: () => {
+          console.log('dongjo complete')
+        }
+      })
+  }
+
   const stop = () => {
     timerRef.current?.unsubscribe()
+  }
+
+  const stopRepeat = () => {
+    repeatRef.current?.unsubscribe()
   }
 
   return {
@@ -44,6 +59,8 @@ const useTimer = () => {
     },
     start,
     stop,
+    repeatUntil,
+    stopRepeat,
     setLearnTime,
     setBreakTime,
   }
