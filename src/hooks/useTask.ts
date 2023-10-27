@@ -5,6 +5,7 @@ import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone } from '@/src/utils/task';
 import { Task } from '@/types';
+import { Subscription, interval, takeWhile, tap, first, filter, from } from 'rxjs';
 
 export const observable = new BehaviorSubject(0);
 
@@ -18,7 +19,7 @@ const useTask = () => {
   )
 
   const addTask = (value: string) => {
-    const tasks = getItems?.(STORAGE_KEY)
+    const tasks = getTasks()
     const nextId = generateId(STORAGE_KEY)
     const newTask = { id: nextId, text: value, done: false, startTime: new Date(), endTime: new Date() }
 
@@ -27,11 +28,11 @@ const useTask = () => {
   }
 
   const getTasks = () => {
-    return getItems?.(STORAGE_KEY);
+    return getItems?.(STORAGE_KEY) || [];
   }
 
   const checkTask = (id: number) => {
-    const tasks = getItems?.(STORAGE_KEY)
+    const tasks = getTasks()
     const newTasks = tasks.map(updateDone(id));
 
     setItems?.(STORAGE_KEY, newTasks);
@@ -39,7 +40,7 @@ const useTask = () => {
   }
 
   const popTask = (cond?: (task: Task) => boolean) => {
-    const tasks = getItems?.(STORAGE_KEY)
+    const tasks = getTasks()
     if (!cond) {
       return tasks.shift();
     }
@@ -48,11 +49,22 @@ const useTask = () => {
       .shift();
   }
 
+  const checkTaskOfTop = () => {
+    const tasks: Task[] = getTasks()
+
+    return from(tasks).pipe(
+      filter((task) => task.done),
+      first(),
+      tap((task) => console.log(task))
+    )
+  }
+
   return {
     addTask,
     getTasks,
     checkTask,
     popTask,
+    checkTaskOfTop
   }
 }
 export default useTask;

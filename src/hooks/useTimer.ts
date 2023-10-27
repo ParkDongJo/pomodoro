@@ -30,12 +30,15 @@ const useTimer = () => {
       })
   }
 
-  const repeatUntil = (time: number) => {
-    const source$ = concat(learnTime$, breakTime$)
+  const repeatUntil = (time: number, task$: Observable<any>) => {
+    const source$ = concat(learnTime$, breakTime$, task$)
     repeatRef.current = source$.pipe(repeat(time))
       .subscribe({
         complete: () => {
           console.log('dongjo complete')
+        },
+        error: (err) => {
+          console.log('dongjo error')
         }
       })
   }

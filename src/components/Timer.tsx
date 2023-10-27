@@ -17,7 +17,7 @@ export default function Timer() {
     setLearnTime,
     setBreakTime,
   } = useTimer()
-  const { checkTask, popTask } = useTask()
+  const { checkTask, popTask, checkTaskOfTop } = useTask()
 
   const showTimeTmpl = (time: number) => {
     return time < 10 ? `0${time}` : String(time);
@@ -27,7 +27,8 @@ export default function Timer() {
     start(() => checkTask(task.id))
   }
   const handleRepeat = () => {
-    repeatUntil(3)
+    const task$ = checkTaskOfTop()
+    repeatUntil(3, task$)
   }
   const handleStopRepeat = () => {
     stopRepeat()
