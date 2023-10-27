@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Subscription, interval, takeWhile, map, tap, concat, repeat } from 'rxjs';
+import { Observable, Subscription, interval, takeWhile, map, tap, concat, repeat } from 'rxjs';
 
 const useTimer = () => {
   const [breakTime, setBreakTime] = useState(0);

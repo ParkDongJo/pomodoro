@@ -53,9 +53,9 @@ const useTask = () => {
     const tasks: Task[] = getTasks()
 
     return from(tasks).pipe(
-      filter((task) => task.done),
+      filter((task) => !task.done),
       first(),
-      tap((task) => console.log(task))
+      tap((task) => checkTask(task.id))
     )
   }
 
