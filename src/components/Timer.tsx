@@ -4,38 +4,43 @@ import IconButton from "./IconButton"
 import TimeList from "./TimeList"
 import useTimer from "../hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
-import { Time } from '@/types'
+import { Time, Task } from '@/types'
 
 export default function Timer() {
   const {
     learnTime,
     breakTime,
-    start,
-    stop,
     repeatUntil,
     stopRepeat,
     setLearnTime,
     setBreakTime,
   } = useTimer()
-  const { checkTask, popTask, checkTaskOfTop } = useTask()
+  const { checkTask, popTask, getTaskLength } = useTask()
+
+  const condition = (task: Task) => task.done
 
   const showTimeTmpl = (time: number) => {
     return time < 10 ? `0${time}` : String(time);
   }
-  const handleStart = () => {
-    const task = popTask((task) => !task.done)
-    start(() => checkTask(task.id))
+  const repeat = (times: number) => {
+    repeatUntil(times, () => {
+      const task = popTask(condition)
+      checkTask(task.id)
+    })
   }
+
+  const handleStart = () => {
+    repeat(1)
+  }
+
   const handleRepeat = () => {
-    const task$ = checkTaskOfTop()
-    repeatUntil(3, task$)
+    const length = getTaskLength(condition)
+    repeat(length)
   }
   const handleStopRepeat = () => {
     stopRepeat()
   }
-  const handleStop = () => {
-    stop()
-  }
+
   const handleClickTime = (lt: Time, bt: Time) => {
     setLearnTime(lt.minutes * 60 + lt.seconds)
     setBreakTime(bt.minutes * 60 + bt.seconds)
@@ -47,7 +52,7 @@ export default function Timer() {
     <p>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</p>
     <p>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</p>
     <IconButton onClick={handleStart} />
-    <IconButton onClick={handleStop} />
+    <IconButton onClick={handleStopRepeat} />
     <div>
       <IconButton onClick={handleRepeat} />
       <IconButton onClick={handleStopRepeat} />

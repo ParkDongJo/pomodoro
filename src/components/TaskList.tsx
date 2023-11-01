@@ -1,16 +1,19 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import Task from './Task'
-import { Task as TaskType } from '../../types'
 import styles from '../styles/task.module.css'
 import useTask from '@/src/hooks/useTask'
 import useStore from '@/src/store/task'
+import useCount, { observable } from '@/src/hooks/useCount'
 
-interface Props {
-}
 export default function TaskList() {
   const { getTasks } = useTask();
   const store = useStore();
+  const count = useCount()
+
+  const handleClick = () => {
+    observable.next(count + 1)
+  }
 
   useEffect(() => {
     const tasks = getTasks();
@@ -21,5 +24,7 @@ export default function TaskList() {
     {store.tasks?.map((data, index) => (
       <Task key={`${data.text}-${index}`} {...data} />
     ))}
+    <div>count : {count}</div>
+    <button onClick={handleClick}>TEST</button>
   </div>)
 }

@@ -13,10 +13,11 @@ export default function Task(props: Props) {
   const onCheck = () => {
     setChecked(!checked);
   }
-
+  console.log('render task', done)
   return (
     <div className={styles.task} onClick={onCheck}>
-      <input type="checkbox" checked={done} />
+      <input type="checkbox" checked={checked} />
       <span>{text}</span>
+      {done && <span>done</span>}
     </div>)
 }

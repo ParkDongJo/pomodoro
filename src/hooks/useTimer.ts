@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
-import { Observable, Subscription, interval, takeWhile, map, tap, concat, repeat } from 'rxjs';
+import { Subscription, interval, takeWhile, map, tap, concat, repeat, from, take } from 'rxjs';
+
+const HOLDING = 'holding'
 
 const useTimer = () => {
   const [breakTime, setBreakTime] = useState(0);
   const [learnTime, setLearnTime] = useState(0);
-  const timerRef = useRef<Subscription>();
   const repeatRef = useRef<Subscription>();
 
   const learnTime$ = interval(1000).pipe(
@@ -17,22 +18,21 @@ const useTimer = () => {
     map(x => breakTime - x),
     tap(x => setBreakTime(x))
   )
+  const hold$ = from([HOLDING]).pipe(take(1))
 
   const getMinutes = (time: number) => Math.floor(time / 60);
   const getSeconds = (time: number) => Number(time % 60);
 
-  const start = (callback: () => void) => {
-    timerRef.current = concat(learnTime$, breakTime$)
-      .subscribe({
-        complete: () => {
+  const repeatUntil = (time: number, callback: () => void) => {
+    const source$ = concat(learnTime$, breakTime$, hold$)
+    repeatRef.current = source$.pipe(
+      repeat(time),
+      tap((x) => {
+        if (x === HOLDING) {
           callback()
+          resetTime()
         }
-      })
-  }
-
-  const repeatUntil = (time: number, task$: Observable<any>) => {
-    const source$ = concat(learnTime$, breakTime$, task$)
-    repeatRef.current = source$.pipe(repeat(time))
+      }))
       .subscribe({
         complete: () => {
           console.log('dongjo complete')
@@ -43,12 +43,13 @@ const useTimer = () => {
       })
   }
 
-  const stop = () => {
-    timerRef.current?.unsubscribe()
-  }
-
   const stopRepeat = () => {
     repeatRef.current?.unsubscribe()
+  }
+
+  const resetTime = () => {
+    setLearnTime(learnTime)
+    setBreakTime(breakTime)
   }
 
   return {
@@ -60,8 +61,6 @@ const useTimer = () => {
       minutes: getMinutes(breakTime),
       seconds: getSeconds(breakTime),
     },
-    start,
-    stop,
     repeatUntil,
     stopRepeat,
     setLearnTime,

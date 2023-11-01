@@ -5,7 +5,7 @@ import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone } from '@/src/utils/task';
 import { Task } from '@/types';
-import { Subscription, interval, takeWhile, tap, first, filter, from } from 'rxjs';
+import { Subscription, interval, map, tap, take, filter, from } from 'rxjs';
 
 export const observable = new BehaviorSubject(0);
 
@@ -50,13 +50,17 @@ const useTask = () => {
   }
 
   const checkTaskOfTop = () => {
-    const tasks: Task[] = getTasks()
-
-    return from(tasks).pipe(
+    return from(store.tasks).pipe(
       filter((task) => !task.done),
-      first(),
-      tap((task) => checkTask(task.id))
+      take(1)
     )
+  }
+
+  const getTaskLength = (cond?: (task: Task) => boolean) => {
+    if (!cond) {
+      return store.tasks.length;
+    }
+    return store.tasks.filter(cond).length;
   }
 
   return {
@@ -64,7 +68,8 @@ const useTask = () => {
     getTasks,
     checkTask,
     popTask,
-    checkTaskOfTop
+    checkTaskOfTop,
+    getTaskLength,
   }
 }
 export default useTask;
