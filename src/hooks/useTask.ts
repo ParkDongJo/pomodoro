@@ -49,13 +49,6 @@ const useTask = () => {
       .shift();
   }
 
-  const checkTaskOfTop = () => {
-    return from(store.tasks).pipe(
-      filter((task) => !task.done),
-      take(1)
-    )
-  }
-
   const getTaskLength = (cond?: (task: Task) => boolean) => {
     if (!cond) {
       return store.tasks.length;
@@ -68,7 +61,6 @@ const useTask = () => {
     getTasks,
     checkTask,
     popTask,
-    checkTaskOfTop,
     getTaskLength,
   }
 }

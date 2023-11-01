@@ -12,12 +12,12 @@ export default function Timer() {
     breakTime,
     repeatUntil,
     stopRepeat,
-    setLearnTime,
-    setBreakTime,
+    initLearnTime,
+    initBreakTime,
   } = useTimer()
   const { checkTask, popTask, getTaskLength } = useTask()
 
-  const condition = (task: Task) => task.done
+  const condition = (task: Task) => !task.done
 
   const showTimeTmpl = (time: number) => {
     return time < 10 ? `0${time}` : String(time);
@@ -42,8 +42,8 @@ export default function Timer() {
   }
 
   const handleClickTime = (lt: Time, bt: Time) => {
-    setLearnTime(lt.minutes * 60 + lt.seconds)
-    setBreakTime(bt.minutes * 60 + bt.seconds)
+    initLearnTime(lt.minutes * 60 + lt.seconds)
+    initBreakTime(bt.minutes * 60 + bt.seconds)
   }
 
   return (

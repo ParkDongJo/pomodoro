@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/task.module.css"
+import { set } from "lodash-es";
 
 interface Props {
   text: string;
@@ -13,7 +14,11 @@ export default function Task(props: Props) {
   const onCheck = () => {
     setChecked(!checked);
   }
-  console.log('render task', done)
+
+  useEffect(() => {
+    setChecked(done)
+  }, [done])
+
   return (
     <div className={styles.task} onClick={onCheck}>
       <input type="checkbox" checked={checked} />

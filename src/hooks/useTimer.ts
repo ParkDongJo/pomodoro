@@ -7,6 +7,8 @@ const useTimer = () => {
   const [breakTime, setBreakTime] = useState(0);
   const [learnTime, setLearnTime] = useState(0);
   const repeatRef = useRef<Subscription>();
+  const initialLearnTimeRef = useRef<number>();
+  const initialBreakTimeRef = useRef<number>();
 
   const learnTime$ = interval(1000).pipe(
     takeWhile(x => x <= learnTime),
@@ -47,9 +49,17 @@ const useTimer = () => {
     repeatRef.current?.unsubscribe()
   }
 
+  const initLearnTime = (time: number) => {
+    initialLearnTimeRef.current = time
+    setLearnTime(time)
+  }
+  const initBreakTime = (time: number) => {
+    initialBreakTimeRef.current = time
+    setBreakTime(time)
+  }
   const resetTime = () => {
-    setLearnTime(learnTime)
-    setBreakTime(breakTime)
+    setLearnTime(initialLearnTimeRef.current ?? 0)
+    setBreakTime(initialBreakTimeRef.current ?? 0)
   }
 
   return {
@@ -63,8 +73,8 @@ const useTimer = () => {
     },
     repeatUntil,
     stopRepeat,
-    setLearnTime,
-    setBreakTime,
+    initLearnTime,
+    initBreakTime,
   }
 }
 export default useTimer
