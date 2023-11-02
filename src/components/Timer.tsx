@@ -1,7 +1,7 @@
 "use client";
 import styles from "../styles/timer.module.css"
 import IconButton from "./IconButton"
-import TimeList from "./TimeList"
+import TimerHeader from "./TimerHeader"
 import useTimer from "../hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
 import { Time, Task } from '@/types'
@@ -47,7 +47,7 @@ export default function Timer() {
 
   return (
   <div className={styles.main}>
-    <TimeList onClick={handleClickTime} />
+    <TimerHeader setTimer={handleClickTime} />
     <p>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</p>
     <p>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</p>
     <IconButton title={"1회 실행하기"} onClick={handleStart} />

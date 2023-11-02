@@ -23,9 +23,10 @@ export default function Home() {
     <>
       <Header />
       <Timer />
-      <StatusBoard order={1} tasks={tasks} />
+      <StatusBoard />
       <AddForm />
       <TaskList />
+      
     </>
   )
 };

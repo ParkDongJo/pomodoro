@@ -1,4 +1,5 @@
 "use client";
+import { useState } from 'react'
 import { Time } from '@/types'
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 }
 export default function TimeList(props: Props) {
   const { onClick } = props;
+  const [visible, setVisible] = useState(false);
 
   const pomodoros = [
     { title: '50:00', learnTime: { minutes: 25, seconds: 0 }, breakTime: { minutes: 10, seconds: 0 } },
@@ -22,7 +24,7 @@ export default function TimeList(props: Props) {
             onClick(pomo.learnTime, pomo.breakTime)
           }}>
             {pomo.title}
-          </span>
+        </span>
       ))}
     </div>
   )
