@@ -1,17 +1,29 @@
 "use client";
-import styles from "../styles/button.module.css"
+import styled from "@emotion/styled";
 
 interface Props {
+  title: string;
   onClick: () => void;
 }
 export default function Button(props: Props) {
-  const { onClick } = props;
+  const { title, onClick } = props;
 
   const handleClick = () => {
     onClick();
   }
 
   return (
-    <button className={styles.button_a} onClick={handleClick}>버튼</button>
+    <StyledButton onClick={handleClick}>{title}</StyledButton>
   )
 }
+
+const StyledButton = styled.button`
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #333;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+`

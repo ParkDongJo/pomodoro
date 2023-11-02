@@ -2,10 +2,11 @@ import React from "react";
 import styled from "@emotion/styled";
 
 interface Props {
+  children: React.ReactNode;
   visible: boolean;
   onclose: () => void;
 }
-const Popup = ({ visible, onclose }: Props) => {
+export default function Popup({ children, visible, onclose }: Props) {
   const handleClose = () => {
     onclose()
   }
@@ -18,11 +19,11 @@ const Popup = ({ visible, onclose }: Props) => {
      <Body>
       <h1>{"test"}</h1>
       <button onClick={handleClose}>Close X</button>
+      {children}
      </Body>
     </Container>
   );
 };
-export default Popup;
 
 const Container = styled.div`
   position: fixed;

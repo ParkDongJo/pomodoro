@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react';
+import _ from "lodash-es";
+
 import { Subscription, interval, takeWhile, map, tap, concat, repeat, from, take } from 'rxjs';
 import useStore, { STATUS } from '@/src/store/board';
 
@@ -34,7 +36,7 @@ const useTimer = () => {
   const getMinutes = (time: number) => Math.floor(time / 60);
   const getSeconds = (time: number) => Number(time % 60);
 
-  const repeatUntil = (times: number, callback: () => void) => {
+  const repeatUntil = _.curryRight((times: number, callback: () => void) => {
     repeatRef.current = concat(learnTime$, breakTime$, cut$)
       .pipe(
         repeat(times),
@@ -45,7 +47,7 @@ const useTimer = () => {
           }
         })
       ).subscribe()
-  }
+  })
 
   const stopRepeat = () => {
     repeatRef.current?.unsubscribe()

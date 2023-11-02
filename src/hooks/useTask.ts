@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import _ from "lodash-es"
 import useLocalStorage from '../hooks/useLocalStorage';
 import { incrementId, STORAGE_KEY } from '@/src/utils/task';
 import { pipe } from '@/src/utils/common';
@@ -32,8 +33,7 @@ const useTask = () => {
   }
 
   const checkTask = (id: number) => {
-    const tasks = getTasks()
-    const newTasks = tasks.map(updateDone(id));
+    const newTasks = getTasks().map(updateDone(id));
 
     setItems?.(STORAGE_KEY, newTasks);
     store.checkTask(id);
