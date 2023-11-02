@@ -12,14 +12,14 @@ export default function Input(props: Props) {
   const { name, value = "", placeholder, onChange } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    onChange?.(value)
+    onChange?.(e.target.value)
   }
 
   return (
     <div>
       <input
         type="text"
+        autoComplete="off"
         name={name}
         placeholder={placeholder}
         value={value}

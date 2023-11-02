@@ -2,10 +2,8 @@ import { use } from "react"
 import Header from "@/src/layouts/Nav";
 import Timer from "@/src/components/Timer";
 import TaskList from "@/src/components/TaskList";
-import IconButton from "@/src/components/IconButton";
 import StatusBoard from "@/src/components/StatusBoard";
-import TaskForm from "@/src/components/TaskForm";
-import useTask from "@/src/hooks/useTask";
+import AddForm from "@/src/components/AddForm";
 import { Task } from '@/types'
 
 const fetchTasks = async () => {
@@ -25,10 +23,9 @@ export default function Home() {
     <>
       <Header />
       <Timer />
-      <StatusBoard order={1} task={'test'} />
+      <StatusBoard order={1} tasks={tasks} />
+      <AddForm />
       <TaskList />
-      <IconButton />
-      <TaskForm />
     </>
   )
 };

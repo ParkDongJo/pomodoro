@@ -1,13 +1,14 @@
 "use client";
-import { useTransition, useState } from 'react';
+import { useEffect, useState } from 'react';
+import styled from "@emotion/styled"
 import Input from './Input';
 import useTask from '../hooks/useTask';
 
 interface Props {
+  visible?: boolean;
 }
-export default function TaskFrom(props: Props) {
+export default function TaskFrom({ visible }: Props) {
   const { addTask } = useTask();
-  const [_, startTransition] = useTransition();
   const [value, setValue] = useState<string>();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,17 +18,27 @@ export default function TaskFrom(props: Props) {
     setValue(undefined);
   }
   const handleChange = (value: string | number) => {
-    startTransition(() => {
-      setValue(value.toString());
-    })
+    setValue(value.toString());
   }
 
+  useEffect(() => {
+    setValue(undefined)
+  }, [visible])
+
+  if (!visible) {
+    return null
+  }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Input type="text" name="new-task" value={value} onChange={handleChange} />
-        <button type="submit">Add</button>
-      </form>
-    </div>
+    <From onSubmit={handleSubmit}>
+      <Input type="text" name="new-task" value={value} onChange={handleChange} />
+      <button type="submit">Add</button>
+    </From>
   )
 }
+
+const From = styled.form`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`

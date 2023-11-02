@@ -1,9 +1,10 @@
 "use client";
 
 interface Props {
+  title: string;
   onClick?: () => void;
 }
 export default function IconButton(props: Props) {
-  const { onClick } = props;
-  return (<button onClick={onClick} >아이콘버튼</button>)
+  const { title, onClick } = props;
+  return (<button onClick={onClick}>{title}</button>)
 }

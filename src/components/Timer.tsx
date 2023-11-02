@@ -5,6 +5,7 @@ import TimeList from "./TimeList"
 import useTimer from "../hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
 import { Time, Task } from '@/types'
+import { conditionForTodo } from '@/src/utils/task'
 
 export default function Timer() {
   const {
@@ -17,15 +18,13 @@ export default function Timer() {
   } = useTimer()
   const { checkTask, popTask, getTaskLength } = useTask()
 
-  const condition = (task: Task) => !task.done
-
   const showTimeTmpl = (time: number) => {
     return time < 10 ? `0${time}` : String(time);
   }
   const repeat = (times: number) => {
     repeatUntil(times, () => {
-      const task = popTask(condition)
-      checkTask(task.id)
+      const task = popTask(conditionForTodo)
+      task?.id && checkTask(task.id)
     })
   }
 
@@ -34,7 +33,7 @@ export default function Timer() {
   }
 
   const handleRepeat = () => {
-    const length = getTaskLength(condition)
+    const length = getTaskLength(conditionForTodo)
     repeat(length)
   }
   const handleStopRepeat = () => {
@@ -51,11 +50,11 @@ export default function Timer() {
     <TimeList onClick={handleClickTime} />
     <p>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</p>
     <p>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</p>
-    <IconButton onClick={handleStart} />
-    <IconButton onClick={handleStopRepeat} />
+    <IconButton title={"1회 실행하기"} onClick={handleStart} />
+    <IconButton title={"1회 실행 멈추기"} onClick={handleStopRepeat} />
     <div>
-      <IconButton onClick={handleRepeat} />
-      <IconButton onClick={handleStopRepeat} />
+      <IconButton title={"연속 실행하기"} onClick={handleRepeat} />
+      <IconButton title={"연속 실행 멈추기"} onClick={handleStopRepeat} />
     </div>
   </div>)
 }

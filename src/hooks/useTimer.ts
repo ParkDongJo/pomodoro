@@ -1,52 +1,56 @@
 import { useState, useRef } from 'react';
 import { Subscription, interval, takeWhile, map, tap, concat, repeat, from, take } from 'rxjs';
+import useStore, { STATUS } from '@/src/store/board';
 
-const HOLDING = 'holding'
+const CUT = 'CUT'
 
 const useTimer = () => {
   const [breakTime, setBreakTime] = useState(0);
   const [learnTime, setLearnTime] = useState(0);
   const repeatRef = useRef<Subscription>();
+  const statusRef = useRef<STATUS>();
   const initialLearnTimeRef = useRef<number>();
   const initialBreakTimeRef = useRef<number>();
+  const store = useStore()
 
   const learnTime$ = interval(1000).pipe(
     takeWhile(x => x <= learnTime),
     map(x => learnTime - x),
-    tap(x => setLearnTime(x))
+    tap(x => {
+      setLearnTime(x)
+      if (x === learnTime) store.updateStatus(STATUS.진행중)
+      if (x === 0) store.updateStatus(STATUS.휴식중)
+    })
   )
   const breakTime$ = interval(1000).pipe(
     takeWhile(x => x <= breakTime),
     map(x => breakTime - x),
-    tap(x => setBreakTime(x))
+    tap(x => {
+      setBreakTime(x)
+    })
   )
-  const hold$ = from([HOLDING]).pipe(take(1))
+  const cut$ = from([CUT]).pipe(take(1))
 
   const getMinutes = (time: number) => Math.floor(time / 60);
   const getSeconds = (time: number) => Number(time % 60);
 
-  const repeatUntil = (time: number, callback: () => void) => {
-    const source$ = concat(learnTime$, breakTime$, hold$)
-    repeatRef.current = source$.pipe(
-      repeat(time),
-      tap((x) => {
-        if (x === HOLDING) {
-          callback()
-          resetTime()
-        }
-      }))
-      .subscribe({
-        complete: () => {
-          console.log('dongjo complete')
-        },
-        error: (err) => {
-          console.log('dongjo error')
-        }
-      })
+  const repeatUntil = (times: number, callback: () => void) => {
+    repeatRef.current = concat(learnTime$, breakTime$, cut$)
+      .pipe(
+        repeat(times),
+        tap((x) => {
+          if (x === CUT) {
+            callback()
+            resetTime()
+          }
+        })
+      ).subscribe()
   }
 
   const stopRepeat = () => {
     repeatRef.current?.unsubscribe()
+    statusRef.current = store.status
+    store.updateStatus(STATUS.대기중)
   }
 
   const initLearnTime = (time: number) => {
