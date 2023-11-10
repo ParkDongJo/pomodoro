@@ -5,10 +5,12 @@ interface Props {
   title: string;
   onClick: () => void;
 }
+
 export default function Button(props: Props) {
   const { title, onClick } = props;
 
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     onClick();
   }
 

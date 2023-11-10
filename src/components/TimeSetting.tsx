@@ -4,12 +4,16 @@ import Button from "@/src/components/Button";
 import TimeInputs from "@/src/components/Timer/Inputs"
 import { Time } from "@/types";
 
+const DEFAULT_TIME = { minutes: 0, seconds: 0 }
+
 interface Props {
+  initialTime?: { lt: Time; bt: Time };
   onComplete: (learnTime: Time, breakTime: Time) => void;
 }
-export default function Setting({ onComplete }: Props) {
-  const [learnTime, setLearnTime] = useState({ minutes: 0, seconds: 0 })
-  const [breakTime, setBreakTime] = useState({ minutes: 0, seconds: 0 })
+export default function Setting({ initialTime, onComplete }: Props) {
+  const { lt, bt } = initialTime || { lt: DEFAULT_TIME, bt: DEFAULT_TIME }
+  const [learnTime, setLearnTime] = useState(lt)
+  const [breakTime, setBreakTime] = useState(bt)
 
   const handleClick = () => {
     onComplete(learnTime, breakTime)
@@ -17,8 +21,8 @@ export default function Setting({ onComplete }: Props) {
 
   return (
     <Container>
-      <TimeInputs setTime={setLearnTime} />
-      <TimeInputs setTime={setBreakTime} />
+      <TimeInputs initial={lt} setTime={setLearnTime} />
+      <TimeInputs initial={bt} setTime={setBreakTime} />
       <Button title="추가하기" onClick={handleClick} />
     </Container>
   )

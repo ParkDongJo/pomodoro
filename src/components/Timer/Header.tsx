@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Popup from "@/src/components/Popup"
 import IconButton from "@/src/components/IconButton"
 import TimeList from "@/src/components/Timer/TimeList"
-import Setting from "@/src/components/Timer/Setting"
+import TimeSetting from "@/src/components/TimeSetting"
 import { convertTimeToString } from '@/src/utils/timer';
 import { Time } from "@/types"
 
@@ -39,7 +39,7 @@ const TimerHeader = ({ setTimer }: Props) => {
       <TimeList datas={pomodoros} onClick={setTimer} />
       <IconButton title={"+"} onClick={handleOpenPopup} />
       <Popup visible={visible} onclose={handleClosePopup}>
-        <Setting onComplete={handleAddPomodoro} />
+        <TimeSetting onComplete={handleAddPomodoro} />
       </Popup>
     </>
   )

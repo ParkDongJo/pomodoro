@@ -1,12 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import styles from "@/src/styles/timer.module.css"
 import IconButton from "@/src/components/IconButton"
 import TimerHeader from "@/src/components/Timer/Header"
 import useTimer from "@/src/hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
-import { Time, Task } from '@/types'
 import { conditionForTodo } from '@/src/utils/task'
+import { showTimeTmpl, calcTime } from '@/src/utils/timer'
+import { Time } from '@/types'
 
 export default function Timer() {
   const {
@@ -14,22 +15,26 @@ export default function Timer() {
     breakTime,
     repeatUntil,
     stopRepeat,
-    initLearnTime,
-    initBreakTime,
+    initDefaultTime,
+    initTime,
+    setTimer,
   } = useTimer()
   const { checkTask, popTask, getTaskLength } = useTask()
   const [disabled, setDisabled] = useState(true)
 
-  const showTimeTmpl = (time: number) => {
-    return time < 10 ? `0${time}` : String(time);
-  }
   const repeat = repeatUntil(() => {
-    const task = popTask(conditionForTodo)
-    task?.id && checkTask(task.id)
+    const currTask = popTask(conditionForTodo)
+    checkTask(currTask.id)
+
+    const nextTask = popTask(conditionForTodo)
+    setTimer(nextTask?.learnTime, nextTask?.breakTime)
   })
 
   const handleStartRepeat = () => {
     const length = getTaskLength(conditionForTodo)
+    const task = popTask(conditionForTodo)
+
+    setTimer(task?.learnTime, task?.breakTime)
     repeat(length)
   }
   const handleStopRepeat = () => {
@@ -37,8 +42,8 @@ export default function Timer() {
   }
 
   const handleClickTime = (lt: Time, bt: Time) => {
-    initLearnTime(lt.minutes * 60 + lt.seconds)
-    initBreakTime(bt.minutes * 60 + bt.seconds)
+    initDefaultTime(lt, bt)
+    initTime(calcTime(lt), calcTime(bt))
     setDisabled(false)
   }
 

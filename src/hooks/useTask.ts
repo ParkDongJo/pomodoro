@@ -4,7 +4,7 @@ import useLocalStorage from '../hooks/useLocalStorage';
 import { incrementId, STORAGE_KEY } from '@/src/utils/task';
 import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
-import { updateDone } from '@/src/utils/task';
+import { updateDone, changeTask } from '@/src/utils/task';
 import { Task } from '@/types';
 import { Subscription, interval, map, tap, take, filter, from } from 'rxjs';
 
@@ -28,11 +28,21 @@ const useTask = () => {
     store.addTask(newTask);
   }
 
+  const updateTask = (task: Task) => {
+    const tasks = getTasks().map(changeTask(task));
+
+    setItems?.(STORAGE_KEY, tasks);
+    store.setTasks(tasks);
+  }
+
   const getTasks = () => {
     return getItems?.(STORAGE_KEY) || [];
   }
 
-  const checkTask = (id: number) => {
+  const checkTask = (id?: number) => {
+    if (!id) {
+      throw new Error("id is required")
+    };
     const newTasks = getTasks().map(updateDone(id));
 
     setItems?.(STORAGE_KEY, newTasks);
@@ -58,6 +68,7 @@ const useTask = () => {
 
   return {
     addTask,
+    updateTask,
     getTasks,
     checkTask,
     popTask,

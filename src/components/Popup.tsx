@@ -17,7 +17,6 @@ export default function Popup({ children, visible, onclose }: Props) {
   return (
     <Container>
      <Body>
-      <h1>{"test"}</h1>
       <button onClick={handleClose}>Close X</button>
       {children}
      </Body>

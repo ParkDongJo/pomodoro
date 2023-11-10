@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 interface Props {
+  initial?: { minutes: number; seconds: number }
   setTime: (time: { minutes: number; seconds: number }) => void
 }
-export default function TimeInputs({ setTime }: Props) {
-  const [minutes, setMinutes] = useState(0)
-  const [seconds, setSeconds] = useState(0)
+export default function TimeInputs({ initial, setTime }: Props) {
+  const [minutes, setMinutes] = useState(initial?.minutes || 0)
+  const [seconds, setSeconds] = useState(initial?.seconds || 0)
 
   const handleChangeMinutes = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
