@@ -4,13 +4,14 @@ import { Subscription, interval, takeWhile, map, tap, concat, repeat, from, take
 import useStore, { STATUS } from '@/src/store/board';
 import { calcTime } from '@/src/utils/timer'
 import { Time } from '@/types';
+import { INITIAL_POMODORO } from "@/src/constant";
 
 const CUT = 'CUT'
 
 const useTimer = () => {
-  const defaultTimeRef = useRef<{ learn: number; break: number }>({ learn: 0, break: 0 })
-  const [learnTime, setLearnTime] = useState(0);
-  const [breakTime, setBreakTime] = useState(0);
+  const defaultTimeRef = useRef<{ learn: number; break: number }>({ learn: calcTime(INITIAL_POMODORO.learnTime), break: calcTime(INITIAL_POMODORO.breakTime) })
+  const [learnTime, setLearnTime] = useState(calcTime(INITIAL_POMODORO.learnTime));
+  const [breakTime, setBreakTime] = useState(calcTime(INITIAL_POMODORO.breakTime));
   const learnTimeRef = useRef<number>(0);
   const breakTimeRef = useRef<number>(0);
   const repeatRef = useRef<Subscription>();

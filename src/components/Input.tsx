@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import TextField from '@mui/material/TextField';
 
 interface Props {
   name: string;
@@ -16,15 +17,16 @@ export default function Input(props: Props) {
   }
 
   return (
-    <div>
-      <input
-        type="text"
-        autoComplete="off"
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={handleChange}
-      />
-    </div>
+    <TextField 
+      id="outlined-required"
+      fullWidth
+      label="New Task"
+      variant="filled"
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={handleChange}
+      focused
+    />
   )
 }

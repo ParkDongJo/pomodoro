@@ -1,31 +1,26 @@
 "use client";
-import styled from "@emotion/styled";
+import MuiButton from '@mui/material/Button';
 
 interface Props {
+  isShow?: boolean;
+  size: "small" | "medium" | "large";
+  disabled?: boolean;
   title: string;
   onClick: () => void;
 }
 
 export default function Button(props: Props) {
-  const { title, onClick } = props;
+  const { isShow = true, size = "large", disabled, title, onClick } = props;
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onClick();
   }
 
+  if (!isShow) {
+    return null
+  }
   return (
-    <StyledButton onClick={handleClick}>{title}</StyledButton>
+    <MuiButton size={size} variant="contained" disabled={disabled} onClick={handleClick}>{title}</MuiButton>
   )
 }
-
-const StyledButton = styled.button`
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #333;
-  cursor: pointer;
-  font-size: 1rem;
-  margin: 0.5rem;
-  padding: 0.5rem 1rem;
-`

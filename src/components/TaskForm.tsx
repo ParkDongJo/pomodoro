@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import styled from "@emotion/styled"
+import Button from "@/src/components/Button";
 import Input from './Input';
 import useTask from '../hooks/useTask';
 
@@ -11,9 +12,8 @@ export default function TaskFrom({ visible }: Props) {
   const { addTask } = useTask();
   const [value, setValue] = useState<string>();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = () => {
     if (!value) return;
-    e.preventDefault();
     addTask(value);
     setValue(undefined);
   }
@@ -29,16 +29,19 @@ export default function TaskFrom({ visible }: Props) {
     return null
   }
   return (
-    <From onSubmit={handleSubmit}>
+    <From>
       <Input type="text" name="new-task" value={value} onChange={handleChange} />
-      <button type="submit">Add</button>
+      <Button size="large" title="ADD" onClick={handleSubmit} />
     </From>
   )
 }
 
 const From = styled.form`
   display: flex;
+  width: 100%;
+  max-width: 600px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 10px;
 `

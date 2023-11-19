@@ -1,24 +1,20 @@
 "use client";
 import { useState } from 'react'
+import styled from "@emotion/styled"
 import Popup from "@/src/components/Popup"
-import IconButton from "@/src/components/IconButton"
+import IconButton, { ICON } from "@/src/components/IconButton"
 import TimeList from "@/src/components/Timer/TimeList"
 import TimeSetting from "@/src/components/TimeSetting"
 import { convertTimeToString } from '@/src/utils/timer';
 import { Time } from "@/types"
-
-const initialPomodoros = [
-  { title: '50:00 / 10:00', learnTime: { minutes: 50, seconds: 0 }, breakTime: { minutes: 10, seconds: 0 } },
-  { title: '25:00 / 5:00', learnTime: { minutes: 25, seconds: 0 }, breakTime: { minutes: 5, seconds: 0 } },
-  { title: '00:05 / 0:01', learnTime: { minutes: 0, seconds: 5 }, breakTime: { minutes: 0, seconds: 1 } },
-]
+import { INITIAL_POMODOROS } from "@/src/constant";
 
 interface Props {
   setTimer: (learnTime: Time, breakTime: Time) => void
 }
 const TimerHeader = ({ setTimer }: Props) => {
   const [visible, setVisible] = useState(false);
-  const [pomodoros, setPomodoros] = useState(initialPomodoros)
+  const [pomodoros, setPomodoros] = useState(INITIAL_POMODOROS)
 
   const handleOpenPopup = () => {
     setVisible(true)
@@ -35,13 +31,26 @@ const TimerHeader = ({ setTimer }: Props) => {
   }
 
   return (
-    <>
-      <TimeList datas={pomodoros} onClick={setTimer} />
-      <IconButton title={"+"} onClick={handleOpenPopup} />
+    <Container>
+      <Row>
+        <TimeList datas={pomodoros} onClick={setTimer} />
+        <IconButton icon={ICON.ADD_CIRCLE_OUTLINE} onClick={handleOpenPopup} />
+      </Row>
       <Popup visible={visible} onclose={handleClosePopup}>
         <TimeSetting onComplete={handleAddPomodoro} />
       </Popup>
-    </>
+    </Container>
   )
 }
 export default TimerHeader;
+
+const Container = styled.div`
+  margin-bottom: 20px;
+`;
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;

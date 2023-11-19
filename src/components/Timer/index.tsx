@@ -1,8 +1,9 @@
 "use client";
 import { useState, useRef } from "react";
-import styles from "@/src/styles/timer.module.css"
-import IconButton from "@/src/components/IconButton"
+import styled from "@emotion/styled"
 import TimerHeader from "@/src/components/Timer/Header"
+import Button from "@/src/components/Button";
+import Box from '@mui/material/Box';
 import useTimer from "@/src/hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
 import { conditionForTodo } from '@/src/utils/task'
@@ -20,7 +21,7 @@ export default function Timer() {
     setTimer,
   } = useTimer()
   const { checkTask, popTask, getTaskLength } = useTask()
-  const [disabled, setDisabled] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const repeat = repeatUntil(() => {
     const currTask = popTask(conditionForTodo)
@@ -36,25 +37,43 @@ export default function Timer() {
 
     setTimer(task?.learnTime, task?.breakTime)
     repeat(length)
+    setIsPlaying(true)
   }
   const handleStopRepeat = () => {
     stopRepeat()
+    setIsPlaying(false)
   }
 
   const handleClickTime = (lt: Time, bt: Time) => {
     initDefaultTime(lt, bt)
     initTime(calcTime(lt), calcTime(bt))
-    setDisabled(false)
   }
 
   return (
-  <div className={styles.main}>
+  <Box>
     <TimerHeader setTimer={handleClickTime} />
-    <p>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</p>
-    <p>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</p>
-    <div>
-      <IconButton disabled={disabled} title={"연속 실행하기"} onClick={handleStartRepeat} />
-      <IconButton disabled={disabled} title={"연속 실행 멈추기"} onClick={handleStopRepeat} />
-    </div>
-  </div>)
+    <LearnTime>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</LearnTime>
+    <BreakTime>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</BreakTime>
+    <Row>
+      <Button isShow={!isPlaying} size="large" title="START" onClick={handleStartRepeat} />
+      <Button isShow={isPlaying} size="large" title="PUASE" onClick={handleStopRepeat} />
+    </Row>
+  </Box>)
 }
+
+const LearnTime = styled.p`
+  font-size: 6rem;
+  font-weight: 700;
+  text-align: center;
+`
+const BreakTime = styled.p`
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+`
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 20px;
+`

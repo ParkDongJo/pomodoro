@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
+import Checkbox from '@mui/material/Checkbox';
 import { showTimeTmpl } from "@/src/utils/timer";
 import { Task } from "@/types";
 
@@ -24,12 +25,11 @@ export default function TaskRow(props: Props) {
 
   return (
     <Container onClick={handleCheck}>
-      <input type="checkbox" checked={checked} />
+      <Checkbox size="large" edge="start" checked={checked} disableRipple />
       <span>{task.text}</span>
       <span>{showTimeTmpl(task.learnTime?.minutes)} : {showTimeTmpl(task.learnTime?.seconds)}</span>
       <span> / </span>
       <span>{showTimeTmpl(task.breakTime?.minutes)} : {showTimeTmpl(task.breakTime?.seconds)}</span>
-      {task.done && <span>done</span>}
       <Right>
         {rightRsx}
       </Right>
@@ -41,6 +41,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: 2;
 `;
 const Right = styled.div`

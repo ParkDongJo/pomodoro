@@ -2,13 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import _ from "lodash-es";
 import styled from "@emotion/styled";
-import useStore from '@/src/store/task';
-import useTask from '@/src/hooks/useTask';
-import { extractTime } from "@/src/utils/task";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import TaskRow from "@/src/components/TaskRow";
 import Popup from "@/src/components/Popup";
 import TimeSetting from "@/src/components/TimeSetting";
-import Button from "@/src/components/Button";
+import IconButton, { ICON } from "@/src/components/IconButton";
+import useStore from '@/src/store/task';
+import useTask from '@/src/hooks/useTask';
+import { extractTime } from "@/src/utils/task";
 import { Time, Task } from '@/types';
 
 export default function TaskList() {
@@ -42,24 +45,24 @@ export default function TaskList() {
 
   return (
     <>
-      <Container>
+      <List sx={{ width: "100%", maxWidth: 600 }}>
       {store.tasks?.map((data, index) => (
-        <TaskRow key={`${data.text}-${index}`} 
-          task={data}
-          onCheck={handleCheck}
-          rightRsx={<Button title={"타이머 설정"} onClick={() => handleOpenPopup(data)} />}
-        />
+        <ListItem
+          key={`${data.text}-${index}`}
+          sx={{ paddingTop: 0, paddingBottom: 0 }}>
+          <ListItemButton
+            sx={{ borderBottom: "1px solid #eee" }}
+            onClick={() => handleCheck(data.id)} dense>
+            <TaskRow  
+              task={data}
+              rightRsx={<IconButton icon={ICON.ACCESS_TIME} onClick={() => handleOpenPopup(data)} />}
+            />
+          </ListItemButton>
+        </ListItem>
       ))}
-      </Container>
+      </List>
       <Popup visible={!!selectedTask} onclose={handleClosePopup}>
         <TimeSetting initialTime={extractTime(selectedTask)} onComplete={handleAddPomodoro} />
       </Popup>
     </>)
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem 1rem;
-  width: 100%;
-`;

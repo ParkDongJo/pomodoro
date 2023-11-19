@@ -1,5 +1,7 @@
 "use client";
 import { useState } from 'react';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import styled from "@emotion/styled";
 import { Time } from '@/types';
 
@@ -9,23 +11,18 @@ interface Props {
 }
 export default function TimeList({ datas, onClick }: Props) {
   return (
-    <Container>
+    <>
+      <ButtonGroup variant="contained">
       {datas.map((pomo, index) => (
-        <span
+        <Button
           key={`${pomo.title}-${index}`} 
           onClick={() => {
             onClick(pomo.learnTime, pomo.breakTime)
           }}>
             {pomo.title}
-        </span>
+        </Button>
       ))}
-    </Container>
+      </ButtonGroup>
+    </>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;

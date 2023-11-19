@@ -6,7 +6,6 @@ import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone, changeTask } from '@/src/utils/task';
 import { Task } from '@/types';
-import { Subscription, interval, map, tap, take, filter, from } from 'rxjs';
 
 export const observable = new BehaviorSubject(0);
 
