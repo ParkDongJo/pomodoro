@@ -1,5 +1,4 @@
 "use client";
-import { Task } from "@/types"
 import styled from "@emotion/styled"
 import useTaskStore from '@/src/store/task'
 import useBoardStore from '@/src/store/board'
