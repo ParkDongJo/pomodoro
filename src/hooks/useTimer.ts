@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react';
 import _ from "lodash-es";
 import { Subscription, interval, takeWhile, map, tap, concat, repeat, from, take } from 'rxjs';
-import useStore, { STATUS } from '@/src/store/board';
+import useBoardStore, { STATUS } from '@/src/store/board';
+import useCommonStore from '@/src/store/common';
 import { calcTime } from '@/src/utils/timer'
 import { Time } from '@/types';
-import { INITIAL_POMODORO } from "@/src/constant";
+import { INITIAL_POMODORO, PLAY_STATUS } from "@/src/constant";
+import useNotification from '@/src/hooks/useNotification';
 
 const CUT = 'CUT'
 
@@ -15,15 +17,20 @@ const useTimer = () => {
   const learnTimeRef = useRef<number>(0);
   const breakTimeRef = useRef<number>(0);
   const repeatRef = useRef<Subscription>();
-  const store = useStore()
+  const boardStore = useBoardStore()
+  const commonStore = useCommonStore()
+  const { ringAlarm } = useNotification()
   
   const learnTime$ = interval(1000).pipe(
     takeWhile(x => x <= learnTimeRef.current),
     map(x => learnTimeRef.current - x),
     tap(x => {
       setLearnTime(x)
-      if (x === learnTimeRef.current) store.updateStatus(STATUS.진행중)
-      if (x === 0) store.updateStatus(STATUS.휴식중)
+      if (x === learnTimeRef.current) boardStore.updateStatus(STATUS.진행중)
+      if (x === 0) {
+        boardStore.updateStatus(STATUS.휴식중)
+        ringAlarm(300)
+      }
     })
   )
   const breakTime$ = interval(1000).pipe(
@@ -45,15 +52,17 @@ const useTimer = () => {
         tap((x) => {
           if (x === CUT) {
             callback()
-            store.updateStatus(STATUS.대기중)
+            boardStore.updateStatus(STATUS.대기중)
           }
         })
-      ).subscribe()
+      ).subscribe({
+        complete: () => commonStore.changePlayStatus(PLAY_STATUS.멈춤)
+      })
   })
 
   const stopRepeat = () => {
     repeatRef.current?.unsubscribe()
-    store.updateStatus(STATUS.대기중)
+    boardStore.updateStatus(STATUS.대기중)
   }
 
   const initDefaultTime = (lt: Time, bt: Time) => {

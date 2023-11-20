@@ -6,9 +6,11 @@ import Button from "@/src/components/Button";
 import Box from '@mui/material/Box';
 import useTimer from "@/src/hooks/useTimer";
 import useTask from '@/src/hooks/useTask'
+import useStore from '@/src/store/common'
 import { conditionForTodo } from '@/src/utils/task'
 import { showTimeTmpl, calcTime } from '@/src/utils/timer'
 import { Time } from '@/types'
+import { PLAY_STATUS } from '@/src/constant';
 
 export default function Timer() {
   const {
@@ -21,7 +23,7 @@ export default function Timer() {
     setTimer,
   } = useTimer()
   const { checkTask, popTask, getTaskLength } = useTask()
-  const [isPlaying, setIsPlaying] = useState(false)
+  const store = useStore()
 
   const repeat = repeatUntil(() => {
     const currTask = popTask(conditionForTodo)
@@ -37,11 +39,18 @@ export default function Timer() {
 
     setTimer(task?.learnTime, task?.breakTime)
     repeat(length)
-    setIsPlaying(true)
+    store.changePlayStatus(PLAY_STATUS.진행)
   }
   const handleStopRepeat = () => {
     stopRepeat()
-    setIsPlaying(false)
+    store.changePlayStatus(PLAY_STATUS.대기)
+  }
+  const handleReStart = () => {
+    const length = getTaskLength(conditionForTodo)
+  
+    setTimer(learnTime, breakTime)
+    repeat(length)
+    store.changePlayStatus(PLAY_STATUS.진행)
   }
 
   const handleClickTime = (lt: Time, bt: Time) => {
@@ -55,10 +64,12 @@ export default function Timer() {
     <LearnTime>{showTimeTmpl(learnTime.minutes)} : {showTimeTmpl(learnTime.seconds)}</LearnTime>
     <BreakTime>{showTimeTmpl(breakTime.minutes)} : {showTimeTmpl(breakTime.seconds)}</BreakTime>
     <Row>
-      <Button isShow={!isPlaying} size="large" title="START" onClick={handleStartRepeat} />
-      <Button isShow={isPlaying} size="large" title="PUASE" onClick={handleStopRepeat} />
+      <Button isShow={store.playStatus === PLAY_STATUS.멈춤} size="large" title="START" onClick={handleStartRepeat} />
+      <Button isShow={store.playStatus === PLAY_STATUS.진행} size="large" title="PUASE" onClick={handleStopRepeat} />
+      <Button isShow={store.playStatus === PLAY_STATUS.대기} size="large" title="RESTART" onClick={handleReStart} />
     </Row>
-  </Box>)
+  </Box>
+  )
 }
 
 const LearnTime = styled.p`

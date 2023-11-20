@@ -2,8 +2,10 @@
 import MuiButton from '@mui/material/Button';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CloseIcon from '@mui/icons-material/Close';
 
 export enum ICON {
+  CLOSE = "CLOSE",
   ADD_CIRCLE_OUTLINE = "ADD_CIRCLE_OUTLINE",
   ACCESS_TIME = "ACCESS_TIME",
 }
@@ -22,6 +24,7 @@ export default function IconButton(props: Props) {
 
   const renderIcon = () => {
     return {
+      [ICON.CLOSE]: <CloseIcon />,
       [ICON.ADD_CIRCLE_OUTLINE]: <AddCircleOutlineIcon />,
       [ICON.ACCESS_TIME]: <AccessTimeIcon />,
     }[icon]

@@ -6,6 +6,7 @@ import TaskList from "@/src/components/TaskList";
 import StatusBoard from "@/src/components/StatusBoard";
 import AddForm from "@/src/components/AddForm";
 import { Task } from '@/types'
+import Alert from "@/src/components/Alert";
 
 const fetchTasks = async () => {
   // const res = await fetch("http://localhost:3000/api/tasks");
@@ -27,6 +28,7 @@ export default function Home() {
       <StatusBoard />
       <AddForm />
       <TaskList />
+      <Alert severity="info" title={"title"} />
     </div>
   )
 };
