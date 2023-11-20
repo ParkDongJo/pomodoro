@@ -1,5 +1,4 @@
 "use client";
-import { useState, useRef } from "react";
 import styled from "@emotion/styled"
 import TimerHeader from "@/src/components/Timer/Header"
 import Button from "@/src/components/Button";

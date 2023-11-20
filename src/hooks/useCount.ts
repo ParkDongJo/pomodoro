@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BehaviorSubject, Subscription, interval, takeWhile, map, tap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 export const observable = new BehaviorSubject(0);
 

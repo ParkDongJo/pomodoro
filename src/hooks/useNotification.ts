@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 let audioUrl = require('../static/mp3/bell.mp3');
 let alarmUrl = require('../static/image/alarm.png');
 import useStore from '@/src/store/common';
