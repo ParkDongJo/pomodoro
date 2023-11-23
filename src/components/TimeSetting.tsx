@@ -23,7 +23,7 @@ export default function Setting({ initialTime, onComplete }: Props) {
     <Container>
       <TimeInputs initial={lt} setTime={setLearnTime} />
       <TimeInputs initial={bt} setTime={setBreakTime} />
-      {/* <Button title="추가하기" onClick={handleClick} /> */}
+      <Button size="large" title="추가하기" onClick={handleClick} />
     </Container>
   )
 }

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import _ from "lodash-es";
-import styled from "@emotion/styled";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -41,6 +40,7 @@ export default function TaskList() {
     const tasks = getTasks()
     store.setTasks(tasks)
     store.setCurrentTask(tasks[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

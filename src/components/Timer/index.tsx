@@ -26,7 +26,7 @@ export default function Timer() {
 
   const repeat = repeatUntil(() => {
     const currTask = popTask(conditionForTodo)
-    checkTask(currTask.id)
+    checkTask(currTask?.id)
 
     const nextTask = popTask(conditionForTodo)
     setTimer(nextTask?.learnTime, nextTask?.breakTime)

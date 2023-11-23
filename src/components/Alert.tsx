@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react"
 import styled from "@emotion/styled";
 import MuiAlert from '@mui/material/Alert';
 import { blueGrey } from '@mui/material/colors';
@@ -7,12 +6,11 @@ import IconButton, { ICON } from "@/src/components/IconButton";
 import useStore from "@/src/store/common";
 
 interface Props {
-  isShow?: boolean;
   severity: "success" | "info" | "warning" | "error";
   title: string;
 }
 export default function Alert(props: Props) {
-  const { isShow = true, severity, title } = props;
+  const { severity, title } = props;
   const store = useStore();
 
   const handleClose = () => {

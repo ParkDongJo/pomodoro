@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { BehaviorSubject } from 'rxjs';
-import _ from "lodash-es"
 import useLocalStorage from '../hooks/useLocalStorage';
 import { incrementId, STORAGE_KEY } from '@/src/utils/task';
-import { pipe } from '@/src/utils/common';
+// import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone, changeTask } from '@/src/utils/task';
 import { Task } from '@/types';
@@ -13,14 +14,15 @@ const useTask = () => {
   const { getItems, setItems } = useLocalStorage();
   const store = useStore();
 
-  const generateId = pipe(
-    getItems,
-    incrementId
-  )
+  // const generateId = pipe(
+  //   getItems,
+  //   incrementId
+  // )
 
   const addTask = (value: string) => {
     const tasks = getTasks()
-    const nextId = generateId(STORAGE_KEY)
+    const nextId = incrementId<Task>(tasks)
+    // const nextId = generateId(STORAGE_KEY)
     const newTask = { id: nextId, text: value, done: false, startTime: new Date(), endTime: new Date() }
 
     setItems?.(STORAGE_KEY, [ ...tasks , newTask ])
@@ -34,9 +36,10 @@ const useTask = () => {
     store.setTasks(tasks);
   }
 
-  const getTasks = () => {
+  const getTasks = (): Task[] => {
     return getItems?.(STORAGE_KEY) || [];
   }
+
 
   const checkTask = (id?: number) => {
     if (!id) {

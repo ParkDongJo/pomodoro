@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { useRef } from "react";
-let audioUrl = require('../static/mp3/bell.mp3');
-let alarmUrl = require('../static/image/alarm.png');
+const audioUrl = require('../static/mp3/bell.mp3');
+const alarmUrl = require('../static/image/alarm.png');
 import useStore from '@/src/store/common';
 
 const useNotification = () => {

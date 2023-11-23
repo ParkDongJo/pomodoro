@@ -4,9 +4,7 @@ import useTaskStore from '@/src/store/task'
 import useBoardStore from '@/src/store/board'
 import { conditionForDone, conditionForTodo } from '@/src/utils/task'
 
-interface Props {
-}
-export default function StatusBoard(props: Props) {
+export default function StatusBoard() {
   const { tasks } = useTaskStore();
   const { status } = useBoardStore();
 

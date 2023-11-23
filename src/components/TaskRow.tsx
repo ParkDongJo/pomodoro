@@ -25,7 +25,7 @@ export default function TaskRow(props: Props) {
 
   return (
     <Container onClick={handleCheck}>
-      <Checkbox size="large" edge="start" checked={checked} disableRipple />
+      <Checkbox size="medium" edge="start" checked={checked} disableRipple />
       <span>{task.text}</span>
       <span>{showTimeTmpl(task.learnTime?.minutes)} : {showTimeTmpl(task.learnTime?.seconds)}</span>
       <span> / </span>
