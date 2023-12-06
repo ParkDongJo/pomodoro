@@ -1,10 +1,10 @@
 import { Time } from "@/types"
 
 export const convertTimeToString = ({ minutes, seconds }: Time) => {
-  return `${convert(minutes)}:${convert(seconds)}`
+  return `${digitsTime(minutes)}:${digitsTime(seconds)}`
 }
 
-const convert = (time: number) => {
+const digitsTime = (time: number) => {
   return time < 10 ? `0${time}` : `${time}`;
 }
 

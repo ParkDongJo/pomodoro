@@ -12,7 +12,7 @@ const useLocalStorage = () => {
   const getItems = wrapRunWhenWindow(<T extends ItemWithId>(key: string): T[] => {
     const tasks = localStorage.getItem(key);
     return  tasks ? JSON.parse(tasks) : [];
-  })
+  }) || (() => [])
 
   const getItem = <T extends ItemWithId>(key: string, id: number): T|undefined => {
     const items: T[] = getItems?.(key);

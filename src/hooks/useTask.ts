@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { BehaviorSubject } from 'rxjs';
+import _ from "lodash-es"
 import useLocalStorage from '../hooks/useLocalStorage';
 import { incrementId, STORAGE_KEY } from '@/src/utils/task';
-// import { pipe } from '@/src/utils/common';
+import { pipe } from '@/src/utils/common';
 import useStore from '@/src/store/task';
 import { updateDone, changeTask } from '@/src/utils/task';
 import { Task } from '@/types';
@@ -14,16 +14,19 @@ const useTask = () => {
   const { getItems, setItems } = useLocalStorage();
   const store = useStore();
 
-  // const generateId = pipe(
-  //   getItems,
-  //   incrementId
-  // )
+  const createTask = _.curry((value: string, nextId: number) => {
+    return { id: nextId, text: value, done: false, startTime: new Date(), endTime: new Date() }
+  })
+
+  const createNewTask = (value: string) => pipe(
+    getItems,
+    incrementId,
+    createTask(value)
+  )
 
   const addTask = (value: string) => {
     const tasks = getTasks()
-    const nextId = incrementId<Task>(tasks)
-    // const nextId = generateId(STORAGE_KEY)
-    const newTask = { id: nextId, text: value, done: false, startTime: new Date(), endTime: new Date() }
+    const newTask: Task = createNewTask(value)(STORAGE_KEY)
 
     setItems?.(STORAGE_KEY, [ ...tasks , newTask ])
     store.addTask(newTask);
@@ -37,7 +40,7 @@ const useTask = () => {
   }
 
   const getTasks = (): Task[] => {
-    return getItems?.(STORAGE_KEY) || [];
+    return getItems(STORAGE_KEY) as Task[] || [];
   }
 
 

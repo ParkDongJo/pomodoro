@@ -27,6 +27,7 @@ export default function Input(props: Props) {
       value={value}
       onChange={handleChange}
       focused
+      sx={{ input: { color: 'white' } }}
     />
   )
 }
